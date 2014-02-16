@@ -5,6 +5,10 @@ define([
     var ExampleOneView = Backbone.View.extend({
         template: _.template(template),
 
+        initialize: function() {
+            this.intervalId = 0;
+        },
+
         runExample: function() {
             /*
              * Expected keys in object:
@@ -29,7 +33,7 @@ define([
                     var delta_area  = neighbor.area  - this.area;
                     delta_area = (delta_area ) / area_range;
 
-                    neighbor.distance = Math.sqrt( delta_rooms*delta_rooms + delta_area*delta_area );
+                    neighbor.distance = Math.sqrt(delta_rooms * delta_rooms + delta_area * delta_area);
                 }
             };
             Node.prototype.sortByDistance = function() {
@@ -168,7 +172,6 @@ define([
                     ctx.fill();
                     ctx.closePath();
 
-
                     /*
                      * Is this an unknown node? If so, draw the radius of influence
                      */
@@ -203,8 +206,6 @@ define([
 
             };
 
-
-
             var nodes;
 
             var data = [
@@ -235,10 +236,9 @@ define([
                 {rooms: 1, area: 1300, type: 'flat'},
             ];
             var run = function() {
-
-                nodes = new NodeList(3);
+                nodes = new NodeList(5);
                 for (var i in data) {
-                    nodes.add( new Node(data[i]) );
+                    nodes.add(new Node(data[i]));
                 }
                 var random_rooms = Math.round(Math.random() * 10);
                 var random_area = Math.round(Math.random() * 2000);
@@ -248,14 +248,20 @@ define([
                 nodes.draw("ml1-canvas");
             };
 
-            //setInterval(run, 5000);
+            this.intervalId = setInterval(run, 1000);
             run();
         },
 
         render: function() {
+            this.close();
             this.$el.html(this.template());
             this.runExample();
             return this;
+        },
+
+        close: function() {
+            clearInterval(this.intervalId);
+            this.$el.html('');
         }
     });
     return ExampleOneView;
