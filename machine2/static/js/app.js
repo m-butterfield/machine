@@ -1,8 +1,10 @@
 define([
     'backbone',
+    'views/view_controller',
     'views/example_one',
-    'views/example_two'
-], function(Backbone, ExampleOneView, ExampleTwoView) {
+    'views/example_two',
+    'views/example_three'
+], function(Backbone, ViewController, ExampleOneView, ExampleTwoView, ExampleThreeView) {
 
     var exampleOneView = new ExampleOneView({
         el: $("#machine-example1")
@@ -12,32 +14,13 @@ define([
         el: $("#machine-example2")
     });
 
-    var ViewController = Backbone.View.extend({
-
-        events: {
-            "click #example-1": "showOneView",
-            "click #example-2": "showTwoView"
-        },
-
-        viewOne: exampleOneView,
-        viewTwo: exampleTwoView,
-
-        showOneView: function(event) {
-            event.preventDefault();
-            this.viewTwo.close();
-            this.viewOne.render();
-        },
-
-        showTwoView: function() {
-            event.preventDefault();
-            this.viewOne.close();
-            this.viewTwo.render();
-        }
-
-    });
+    var exampleThreeView = new ExampleThreeView({
+        el: $("#machine-example3")
+    })
 
     var viewController = new ViewController({
-        el: $("#view-controller")
+        el: $("#view-controller"),
+        exampleViews: [exampleOneView, exampleTwoView, exampleThreeView]
     });
 
 });
