@@ -18,7 +18,7 @@ define([
 
     var exampleThreeView = new ExampleThreeView({
         el: $("#machine-example3")
-    })
+    });
 
     var router = new Router({
         exampleViews: [
