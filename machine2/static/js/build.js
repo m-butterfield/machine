@@ -10,12 +10,9 @@
         "underscore": '../vendor/underscore'
     },
     "shim": {
-        "backbone": {
-            deps: ["jquery", "underscore"],
-            exports: "Backbone"
-        },
         "bootstrap": ["jquery"]
     },
+    removeCombined: false,
     out: 'main-build.js',
     findNestedDependencies: true
 })
