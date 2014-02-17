@@ -9,10 +9,6 @@ require.config({
         "underscore": '../vendor/underscore'
     },
     "shim": {
-        "backbone": {
-            deps: ["jquery", "underscore"],
-            exports: "Backbone"
-        },
         "bootstrap": ["jquery"]
     },
     urlArgs: "bust=" + Math.floor(Math.random() * 1000000000)
