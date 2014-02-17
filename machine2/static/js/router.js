@@ -21,7 +21,7 @@ define([
             var viewIndex = Number(exampleNumber) - 1;
             this.currentView && this.currentView.close();
             this.currentView = this.exampleViews[viewIndex];
-            this.currentView.render();
+            this.currentView && this.currentView.render();
         }
     })
     return Router;
