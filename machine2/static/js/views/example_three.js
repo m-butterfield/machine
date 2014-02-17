@@ -1,6 +1,6 @@
 define([
     'backbone',
-    'text!templates/example_two.html'
+    'text!templates/example_three.html'
 ], function(Backbone, template) {
     var ExampleTwoView = Backbone.View.extend({
         template: _.template(template),
@@ -62,13 +62,13 @@ define([
                 }
             };
             Population.prototype.display = function() {
-                that.el.innerHTML = '';
-                that.el.innerHTML += ("<h2>Generation: " + this.generationNumber + "</h2>");
-                that.el.innerHTML += ("<ul>");
+                that.innerEl.innerHTML = '';
+                that.innerEl.innerHTML += ("<h2>Generation: " + this.generationNumber + "</h2>");
+                that.innerEl.innerHTML += ("<ul>");
                 for (var i = 0; i < this.members.length; i++) {
-                    that.el.innerHTML += ("<li>" + this.members[i].code + " (" + this.members[i].cost + ")");
+                    that.innerEl.innerHTML += ("<li>" + this.members[i].code + " (" + this.members[i].cost + ")");
                 }
-                that.el.innerHTML += ("</ul>");
+                that.innerEl.innerHTML += ("</ul>");
             };
             Population.prototype.sort = function() {
                 this.members.sort(function(a, b) {
@@ -108,6 +108,8 @@ define([
 
         render: function() {
             this.close();
+            this.$el.html(this.template());
+            this.innerEl = $("#example-3-inner", this.el)[0];
             this.runExample();
             return this;
         },

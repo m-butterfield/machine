@@ -13,7 +13,13 @@ define([
 
         doNavigate: function(event) {
             event.preventDefault();
-            this.router.navigate($(event.target).attr('href'), {trigger: true});
+            if (window.location.href === event.target.href) {
+                Backbone.history.loadUrl(Backbone.history.fragment);
+            } else {
+                this.router.navigate($(event.target).attr('href'), {
+                    trigger: true
+                });
+            }
         }
 
     })
