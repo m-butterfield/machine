@@ -236,7 +236,7 @@ define([
                 {rooms: 1, area: 1300, type: 'flat'},
             ];
             var run = function() {
-                nodes = new NodeList(5);
+                nodes = new NodeList(3);
                 for (var i in data) {
                     nodes.add(new Node(data[i]));
                 }
@@ -248,7 +248,7 @@ define([
                 nodes.draw("ml1-canvas");
             };
 
-            this.intervalId = setInterval(run, 1000);
+            this.intervalId = setInterval(run, 3000);
             run();
         },
 
