@@ -1,10 +1,12 @@
 define([
     'backbone',
-    'views/view_controller',
+    'router',
+    'views/main_links',
     'views/example_one',
     'views/example_two',
     'views/example_three'
-], function(Backbone, ViewController, ExampleOneView, ExampleTwoView, ExampleThreeView) {
+], function(Backbone, Router, MainLinksView,
+            ExampleOneView, ExampleTwoView, ExampleThreeView) {
 
     var exampleOneView = new ExampleOneView({
         el: $("#machine-example1")
@@ -18,9 +20,19 @@ define([
         el: $("#machine-example3")
     })
 
-    var viewController = new ViewController({
-        el: $("#view-controller"),
-        exampleViews: [exampleOneView, exampleTwoView, exampleThreeView]
+    var router = new Router({
+        exampleViews: [
+            exampleOneView,
+            exampleTwoView,
+            exampleThreeView
+        ]
     });
+
+    var mainLinksView = new MainLinksView({
+        el: $("#main-links"),
+        router: router
+    });
+
+    Backbone.history.start({pushState: true});
 
 });
