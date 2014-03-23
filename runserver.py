@@ -1,3 +1,3 @@
-from machine2 import app
+from machine import app
 import config
 app.run(debug=config.DEBUG)

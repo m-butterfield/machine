@@ -4,7 +4,7 @@ define([
     'views/main_links',
     'views/example_one',
     'views/example_two',
-    'views/example_three'
+    'views/example_three',
 ], function(Backbone, Router, MainLinksView,
             ExampleOneView, ExampleTwoView, ExampleThreeView) {
 

@@ -2,7 +2,7 @@ define([
     'backbone',
     'text!templates/example_three.html'
 ], function(Backbone, template) {
-    var ExampleTwoView = Backbone.View.extend({
+    var ExampleThreeView = Backbone.View.extend({
         template: _.template(template),
 
         initialize: function() {
@@ -122,5 +122,5 @@ define([
         }
     });
 
-    return ExampleTwoView;
+    return ExampleThreeView;
 });

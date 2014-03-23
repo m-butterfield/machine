@@ -1,4 +1,4 @@
-from machine2 import app
+from machine import app
 from flask import render_template
 
 @app.route('/')

@@ -3,3 +3,8 @@
     display:block;
     margin:20px auto;
 }
+
+pre {
+    background-color: #FFF;
+    border: none;
+}
