@@ -47,7 +47,7 @@ define([
             Gene.prototype.calcCost = function(compareTo) {
                 var total = 0;
                 for (i = 0; i < this.code.length; i++) {
-                    total += (this.code.charCodeAt(i) - compareTo.charCodeAt(i)) * (this.code.charCodeAt(i) - compareTo.charCodeAt(i));
+                    total += Math.abs(this.code.charCodeAt(i) - compareTo.charCodeAt(i));
                 }
                 this.cost = total;
             };
