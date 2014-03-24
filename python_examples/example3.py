@@ -49,7 +49,7 @@ class Chromosome(object):
     def calculate_cost(self, compare_to):
         total = 0
         for c1, c2 in zip(self.code, compare_to):
-                total += abs(string.printable.index(c1) - string.printable.index(c2))
+            total += abs(string.printable.index(c1) - string.printable.index(c2))
         self.cost = total
 
 
