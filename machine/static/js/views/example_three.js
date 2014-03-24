@@ -11,21 +11,29 @@ define([
 
         runExample: function() {
             var that = this;
-            var Gene = function(code) {
-                if (code) this.code = code;
+            var Chromosome = function(code) {
+                if (code) {
+                    this.code = code;
+                }
                 this.cost = 9999;
             };
-            Gene.prototype.code = '';
-            Gene.prototype.random = function(length) {
+            Chromosome.prototype.code = '';
+            Chromosome.prototype.random = function(length) {
                 while (length--) {
                     this.code += String.fromCharCode(Math.floor(Math.random() * 255));
                 }
             };
-            Gene.prototype.mutate = function(chance) {
-                if (Math.random() > chance) return;
-
+            Chromosome.prototype.mutate = function(chance) {
+                if (Math.random() > chance) {
+                    return;
+                }
+                var upOrDown;
                 var index = Math.floor(Math.random() * this.code.length);
-                var upOrDown = Math.random() <= 0.5 ? -1 : 1;
+                if (this.cost < 50) {
+                    upOrDown = Math.random() <= 0.5 ? -1 : 1;
+                } else {
+                    upOrDown = Math.random() <= 0.5 ? -10 : 10;
+                }
                 var newChar = String.fromCharCode(this.code.charCodeAt(index) + upOrDown);
                 var newString = '';
                 for (i = 0; i < this.code.length; i++) {
@@ -36,15 +44,15 @@ define([
                 this.code = newString;
 
             };
-            Gene.prototype.mate = function(gene) {
-                var pivot = Math.round(this.code.length / 2) - 1;
+            Chromosome.prototype.mate = function(chromosome) {
+                var pivot = Math.round(this.code.length / 2);
 
-                var child1 = this.code.substr(0, pivot) + gene.code.substr(pivot);
-                var child2 = gene.code.substr(0, pivot) + this.code.substr(pivot);
+                var child1 = this.code.substr(0, pivot) + chromosome.code.substr(pivot);
+                var child2 = chromosome.code.substr(0, pivot) + this.code.substr(pivot);
 
-                return [new Gene(child1), new Gene(child2)];
+                return [new Chromosome(child1), new Chromosome(child2)];
             };
-            Gene.prototype.calcCost = function(compareTo) {
+            Chromosome.prototype.calcCost = function(compareTo) {
                 var total = 0;
                 for (i = 0; i < this.code.length; i++) {
                     total += Math.abs(this.code.charCodeAt(i) - compareTo.charCodeAt(i));
@@ -56,9 +64,9 @@ define([
                 this.goal = goal;
                 this.generationNumber = 0;
                 while (size--) {
-                    var gene = new Gene();
-                    gene.random(this.goal.length);
-                    this.members.push(gene);
+                    var chromosome = new Chromosome();
+                    chromosome.random(this.goal.length);
+                    this.members.push(chromosome);
                 }
             };
             Population.prototype.display = function() {
