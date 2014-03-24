@@ -53,9 +53,11 @@ class Population(object):
         self.generation_number = 0
         self.members = []
         for x in xrange(size):
-                c = Chromosome()
-                c.random(len(goal))
-                self.members.append(c)
+            c = Chromosome()
+            c.random(len(goal))
+            c.calculate_cost(self.goal)
+            self.members.append(c)
+        self.members.sort(key=lambda x: x.cost)
 
     def display(self):
         print 'generation: ' + str(self.generation_number)
@@ -63,19 +65,17 @@ class Population(object):
             print m.code + ' (' + str(m.cost) + ')'
 
     def generation(self):
-        (x.calculate_cost(self.goal) for x in self.members)
-        self.display()
-        self.members.sort(key=lambda x: x.cost)
+        for m in self.members:
+            if m.code == self.goal:
+                self.display()
+                return True
         children = self.members[0].mate(self.members[1]);
         self.members = self.members[:-2] + children
         for m in self.members:
             m.mutate(0.5)
             m.calculate_cost(self.goal)
-            if m.code == self.goal:
-                self.members.sort(key=lambda x: x.cost)
-                self.display()
-                return True
-
+        self.members.sort(key=lambda x: x.cost)
+        self.display()
         self.generation_number += 1
         time.sleep(0.01)
         self.generation()
@@ -83,6 +83,7 @@ class Population(object):
 
 def main():
     p = Population()
+    p.display()
     p.generation()
 
 if __name__ == '__main__':
