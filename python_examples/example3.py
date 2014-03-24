@@ -1,6 +1,12 @@
-import sys
-import string
+"""
+My Python spin on this:
+http://burakkanber.com/blog/machine-learning-genetic-algorithms-part-1-javascript/
+"""
+
+from optparse import OptionParser
 import random
+import string
+import sys
 import time
 
 
@@ -52,7 +58,7 @@ class Population(object):
         self.goal = goal
         self.generation_number = 0
         self.members = []
-        for x in xrange(size):
+        for i in xrange(size):
             c = Chromosome()
             c.random(len(goal))
             c.calculate_cost(self.goal)
@@ -69,7 +75,7 @@ class Population(object):
             if m.code == self.goal:
                 self.display()
                 return True
-        children = self.members[0].mate(self.members[1]);
+        children = self.members[0].mate(self.members[1])
         self.members = self.members[:-2] + children
         for m in self.members:
             m.mutate(0.5)
@@ -77,14 +83,21 @@ class Population(object):
         self.members.sort(key=lambda x: x.cost)
         self.display()
         self.generation_number += 1
-        time.sleep(0.01)
-        self.generation()
+        return False
 
 
-def main():
-    p = Population()
+def main(message, population_size):
+    p = Population(message, population_size)
     p.display()
-    p.generation()
+    while not p.generation():
+        time.sleep(0.01)
 
 if __name__ == '__main__':
-    sys.exit(main())
+    usage = "usage: %prog [options]"
+    parser = OptionParser(usage)
+    parser.add_option("-m", "--message", type="string", dest="message",
+                      default='hello', help="message to evolve to")
+    parser.add_option("-p", "--population_size", type="int", dest="population_size",
+                      default=20, help="population size")
+    (options, args) = parser.parse_args()
+    sys.exit(main(options.message, options.population_size))
