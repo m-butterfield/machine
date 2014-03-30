@@ -7,6 +7,7 @@ import sys
 import random
 import math
 import time
+from copy import deepcopy
 from elements import elements
 
 
@@ -19,18 +20,20 @@ class Chromosome(object):
         self.mutation_rate = 0.7
         self.score = 0
         for element in self.members:
-            if not self.members[element].get('active') is None:
-                self.members[element]['active'] = int(round(random.random()))
+            if self.members[element].get('active') is None:
+                self.members[element]['active'] = 0
         self.mutate()
         self.calc_score()
 
     def mutate(self):
         if self.mutation_rate < random.random():
-            return
+            return False
         element = self.members.keys()[random.randint(0, len(self.members.keys()) - 1)]
         self.members[element]['active'] = 0 if self.members[element]['active'] else 1
 
     def calc_score(self):
+        if self.score:
+            return self.score
         self.value = 0
         self.weight = 0
         self.score = 0
@@ -47,13 +50,13 @@ class Chromosome(object):
         child1 = {}
         child2 = {}
         i = 0
-        for element in elements:
+        for element in self.members:
             if i % 2 == 0:
-                child1[element] = self.members[element]
-                child2[element] = other.members[element]
+                child1[element] = deepcopy(self.members[element])
+                child2[element] = deepcopy(other.members[element])
             else:
-                child2[element] = self.members[element]
-                child1[element] = other.members[element]
+                child2[element] = deepcopy(self.members[element])
+                child1[element] = deepcopy(other.members[element])
             i += 1
         child1 = Chromosome(child1)
         child2 = Chromosome(child2)
@@ -61,9 +64,9 @@ class Chromosome(object):
 
 
 class Population(object):
-    def __init__(self, size=20, elements=elements):
+    def __init__(self, size=20, elems=elements):
         self.size = size
-        self.elements = elements
+        self.elements = elems
         self.elitism = 0.2
         self.chromosomes = []
         self.fill()
@@ -71,12 +74,12 @@ class Population(object):
     def fill(self):
         while len(self.chromosomes) < self.size:
             if len(self.chromosomes) < self.size / 3:
-                self.chromosomes.append(Chromosome(self.elements))
+                self.chromosomes.append(Chromosome(deepcopy(self.elements)))
             else:
                 self.mate()
 
     def sort(self):
-        self.chromosomes.sort(key=lambda x: x.calc_score())
+        self.chromosomes.sort(key=lambda x: x.calc_score(), reverse=True)
 
     def kill(self):
         target = math.floor(self.elitism * len(self.chromosomes))
@@ -88,7 +91,7 @@ class Population(object):
         key2 = key1
         while key2 == key1:
             key2 = self.chromosomes[random.randint(0, len(self.chromosomes) - 1)]
-        children = key1.mate_with(key2)
+        children = key1.crossover(key2)
         self.chromosomes += children
 
     def generation(self):
@@ -98,16 +101,7 @@ class Population(object):
         self.fill()
         self.sort()
 
-    def run(self, threshold, no_improvement, last_score, i):
-        if not threshold:
-            threshold = 1000
-        if not no_improvement:
-            no_improvement = 0
-        if not last_score:
-            last_score = False
-        if not i:
-            i = 0
-
+    def run(self, threshold=1000, no_improvement=0, last_score=False, i=0):
         if no_improvement < threshold:
             last_score = self.chromosomes[0].calc_score()
             self.generation()
@@ -121,7 +115,7 @@ class Population(object):
 
             if i % 10 == 0:
                 self.display(i, no_improvement)
-            time.sleep(0.1)
+            time.sleep(0.01)
             self.run(threshold, no_improvement, last_score, i)
             return False
 
@@ -136,7 +130,7 @@ class Population(object):
 
 def main():
     p = Population()
-    p.run()
+    p.run(threshold=100)
 
 if __name__ == '__main__':
     sys.exit(main())
