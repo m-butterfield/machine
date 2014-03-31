@@ -6,22 +6,18 @@ http://burakkanber.com/blog/machine-learning-genetic-algorithms-in-javascript-pa
 import sys
 import random
 import math
-import time
-from copy import deepcopy
+from copy import deepcopy, copy
 from elements import elements
 
 
 class Chromosome(object):
-    def __init__(self, members):
+    def __init__(self, members, weight=0, value=0, max_weight=1000, mutation_rate=0.7, score=0):
         self.members = members
-        self.weight = 0
-        self.value = 0
-        self.max_weight = 1000
-        self.mutation_rate = 0.7
-        self.score = 0
-        for element in self.members:
-            if self.members[element].get('active') is None:
-                self.members[element]['active'] = 0
+        self.weight = weight
+        self.value = value
+        self.max_weight = max_weight
+        self.mutation_rate = mutation_rate
+        self.score = score
         self.mutate()
         self.calc_score()
 
@@ -101,25 +97,6 @@ class Population(object):
         self.fill()
         self.sort()
 
-    def run(self, threshold=1000, no_improvement=0, last_score=False, i=0):
-        if no_improvement < threshold:
-            last_score = self.chromosomes[0].calc_score()
-            self.generation()
-
-            if last_score >= self.chromosomes[0].calc_score():
-                no_improvement += 1
-            else:
-                no_improvement = 0
-
-            i += 1
-
-            if i % 10 == 0:
-                self.display(i, no_improvement)
-            time.sleep(0.01)
-            self.run(threshold, no_improvement, last_score, i)
-            return False
-
-        self.display(i, no_improvement)
 
     def display(self, i, no_improvement):
         print "Generation:\t" + str(i)
@@ -130,7 +107,27 @@ class Population(object):
 
 def main():
     p = Population()
-    p.run(threshold=100)
+    threshold = 100
+    no_improvement = 0
+    i = 0
+    while True:
+        if no_improvement < threshold:
+            last_score = p.chromosomes[0].calc_score()
+            p.generation()
+
+            if last_score >= p.chromosomes[0].calc_score():
+                no_improvement += 1
+            else:
+                no_improvement = 0
+
+            i += 1
+
+            if i % 10 == 0:
+                p.display(i, no_improvement)
+        else:
+            p.display(i, no_improvement)
+            break
+
 
 if __name__ == '__main__':
     sys.exit(main())
