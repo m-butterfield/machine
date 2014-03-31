@@ -90,9 +90,12 @@ class Population(object):
         children = key1.crossover(key2)
         self.chromosomes += children
 
-    def generation(self):
+    def generation(self, too_heavy=False):
         self.sort()
-        self.kill()
+        if too_heavy:
+            self.chromosomes.pop(0)
+        else:
+            self.kill()
         self.mate()
         self.fill()
         self.sort()
@@ -122,8 +125,12 @@ def main():
             if i % 10 == 0:
                 p.display(i, no_improvement)
         else:
-            p.display(i, no_improvement)
-            break
+            if p.chromosomes[0].weight > p.chromosomes[0].max_weight:
+                p.generation(True)
+                no_improvement = 0
+            else:
+                p.display(i, no_improvement)
+                break
 
 
 if __name__ == '__main__':
