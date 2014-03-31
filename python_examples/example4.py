@@ -229,7 +229,7 @@ class Population(object):
         print "Generation:\t%s" % generation_num
         print "Best Value:\t%s" % self.chromosomes[0].score
         print "Weight:\t\t%s" % self.chromosomes[0].weight
-        print "No change in:\t%s" % no_improvement
+        print "No change in:\t%s\n" % no_improvement
 
 
 def main(threshold=500):
