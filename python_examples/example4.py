@@ -6,7 +6,7 @@ http://burakkanber.com/blog/machine-learning-genetic-algorithms-in-javascript-pa
 import sys
 import random
 import math
-from copy import deepcopy, copy
+from copy import copy
 from elements import elements
 
 
@@ -48,11 +48,11 @@ class Chromosome(object):
         i = 0
         for element in self.members:
             if i % 2 == 0:
-                child1[element] = deepcopy(self.members[element])
-                child2[element] = deepcopy(other.members[element])
+                child1[element] = copy(self.members[element])
+                child2[element] = copy(other.members[element])
             else:
-                child2[element] = deepcopy(self.members[element])
-                child1[element] = deepcopy(other.members[element])
+                child2[element] = copy(self.members[element])
+                child1[element] = copy(other.members[element])
             i += 1
         child1 = Chromosome(child1)
         child2 = Chromosome(child2)
@@ -70,7 +70,7 @@ class Population(object):
     def fill(self):
         while len(self.chromosomes) < self.size:
             if len(self.chromosomes) < self.size / 3:
-                self.chromosomes.append(Chromosome(deepcopy(self.elements)))
+                self.chromosomes.append(Chromosome(self.elements))
             else:
                 self.mate()
 
@@ -114,14 +114,11 @@ def main():
         if no_improvement < threshold:
             last_score = p.chromosomes[0].calc_score()
             p.generation()
-
             if last_score >= p.chromosomes[0].calc_score():
                 no_improvement += 1
             else:
                 no_improvement = 0
-
             i += 1
-
             if i % 10 == 0:
                 p.display(i, no_improvement)
         else:
